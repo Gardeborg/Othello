@@ -30,7 +30,7 @@ public class BoardTest {
 
 		Disk diskToPlace = b.diskList.get(Board.index(5,3));
 		Disk neighbour = b.diskList.get(Board.index(5,4));
-		diskToPlace.setColor("white");
+		diskToPlace.setColor(OthelloColor.WHITE);
 		ArrayList<Disk> Acc = new ArrayList<Disk>();
 		ArrayList<Disk> ResultList = b.getReversibleDisks(diskToPlace,neighbour,Acc);
 		assertTrue(ResultList.size() == 1);
@@ -47,7 +47,7 @@ public class BoardTest {
 
 		Disk diskToPlace = b.diskList.get(Board.index(5,3));
 		Disk neighbour = b.diskList.get(Board.index(5,4));
-		diskToPlace.setColor("black");
+		diskToPlace.setColor(OthelloColor.BLACK);
 		ArrayList<Disk> Acc = new ArrayList<Disk>();
 		ArrayList<Disk> ResultList = b.getReversibleDisks(diskToPlace,neighbour,Acc);
 		assertTrue(ResultList.size() == 0);
@@ -57,14 +57,11 @@ public class BoardTest {
 	public void noPossiblePlacement() {
 		Board b = new Board();
 		b.setNeighbours();
-		b.diskList.get(Board.index(1,1)).setColor("black");
-		b.diskList.get(Board.index(2,2)).setColor("white");
-		b.setActivePlayer("black");
+		b.diskList.get(Board.index(1,1)).setColor(OthelloColor.BLACK);
+		b.diskList.get(Board.index(2,2)).setColor(OthelloColor.WHITE);
+		b.setActivePlayer(OthelloColor.BLACK);
 		b.changeTurn();
 		//Should still be the black player
-		assertTrue(b.getActivePlayer() == "black");
+		assertTrue(b.getActivePlayer() == OthelloColor.BLACK);
 	}
-	
-	
-
 }
