@@ -12,6 +12,6 @@ public class OthelloActionListener implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		b.putDisk(b.getActivePlayer(), Board.index(i+1,j+1));
+		b.putDisk(b.getActivePlayer(), i, j);
 	}
 }

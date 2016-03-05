@@ -1,37 +1,27 @@
 package core;
 public class Disk{
 
-	private Disk[] neighbours = new Disk[8];
-	private int i,j;
-	private OthelloColor color = OthelloColor.EMPTY;
 	static final int nrOfNeighbours = 8;
-	
+	private Disk[] neighbours = new Disk[nrOfNeighbours];
+	private Position position;
+	private OthelloColor color = OthelloColor.EMPTY;
+		
 	Disk(int i, int j) {
-		this.i = i;
-		this.j = j;
+		this.position = new Position(i,j);
 	}
 	
 	Disk(int i, int j, OthelloColor color) {
-		this.i = i;
-		this.j = j;
+		this.position = new Position(i,j);
 		this.color = color;		
 	}
 	
 	public void setPos(int i, int j) {
-		this.i = i;
-		this.j = j;
+		this.position.x = i;
+		this.position.y = j;
 	}
 	
-	public void setColor(String c) {
-		if(c == "white") {
-			color = OthelloColor.WHITE;
-		}
-		else if(c == "black") {
-			color = OthelloColor.BLACK;
-		}
-		else {
-			color = OthelloColor.EMPTY;
-		}
+	public void setColor(OthelloColor color)  {
+		this.color = color;		
 	}
 	
 	public boolean isEmpty() {
@@ -43,7 +33,7 @@ public class Disk{
 	}
 	
 	public void printNeighbours() {
-		for(int i = 0; i < 8; i++)
+		for(int i = 0; i < nrOfNeighbours; i++)
 			System.out.print(neighbours[i].color + ", ");
 	}
 	
@@ -58,26 +48,27 @@ public class Disk{
 			return true;
 	}
 	
-	public int findNext(Disk startDisk) {
-		int iDiff = this.i - startDisk.i;
-		int jDiff = this.j - startDisk.j;
-		int i = this.i + (iDiff == 0 ? iDiff : (iDiff/Math.abs(iDiff)));
-		int j = this.j + (jDiff == 0 ? jDiff : (jDiff/Math.abs(jDiff)));
-		return 10*i+j;
+	/*
+	 * Calculates the position of the location further away from the 
+	 * current disk in relation to the start disk.
+	 * Example: start disk is at location 0,1, current at 0,3. Position is at 0,4
+	 * 
+	 * @param 	the starting disk
+	 * @return 	the position
+	 */	
+	protected Position findNext(Disk startDisk) {
+		int iDiff = this.position.x - startDisk.position.x;
+		int jDiff = this.position.y - startDisk.position.y;
+		int i = this.position.x + (iDiff == 0 ? iDiff : (iDiff/Math.abs(iDiff)));
+		int j = this.position.y + (jDiff == 0 ? jDiff : (jDiff/Math.abs(jDiff)));
+		return new Position(i,j);
 	}
 	
-	public String color() {
-		String s; 
-		if(color == OthelloColor.BLACK)
-			s = "b";
-		else if(color == OthelloColor.WHITE)
-			s = "w";
-		else 
-			s = "";
-		return s;
+	public OthelloColor color() {
+		return color;
 	}
 	
-	public void print() {
+	protected void print() {
 		if(color == OthelloColor.WHITE)
 			System.out.print("w");
 		else if(color == OthelloColor.EMPTY)

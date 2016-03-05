@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+
 //import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import javax.swing.KeyStroke;
 
 import core.Board;
 import core.BoardState;
+import core.OthelloColor;
 import core.StateObserver;
 
 public class View implements StateObserver {
@@ -94,10 +96,10 @@ public class View implements StateObserver {
 		
 	    for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
-				if(s.diskList.get(Board.index(i+1,j+1)).color() == "w") {
+				if(s.diskList.get(Board.index(i+1,j+1)).color() == OthelloColor.WHITE) {
 					button[i][j].setIcon(new ImageIcon(this.getClass().getResource("white.gif")));
 				}
-				else if(s.diskList.get(Board.index(i+1,j+1)).color() == "b") {
+				else if(s.diskList.get(Board.index(i+1,j+1)).color() == OthelloColor.BLACK) {
 					button[i][j].setIcon(new ImageIcon(this.getClass().getResource("black.gif")));
 				}
 			
@@ -105,7 +107,13 @@ public class View implements StateObserver {
 			//button[i][j].setIcon(new ImageIcon(this.getClass().getResource("white.gif")));
 			}
 	    }
-	    frame.setTitle(s.turn);
+	    String player;
+	    if(s.currentPlayer == OthelloColor.WHITE)
+	    	player = "White's turn";
+	    else
+	    	player = "Black's turn";
+	    
+	    frame.setTitle(player);
 	}
 	
 	public void addButtonListener(int i, int j, ActionListener listener) {
@@ -117,9 +125,7 @@ public class View implements StateObserver {
 		updateGui(s);
 		if(!s.ongoing) {
 			JOptionPane.showMessageDialog(frame, "Game ended!", 
-					"Good Job both of you", JOptionPane.PLAIN_MESSAGE);
-			
-			
+					"Good Job both of you", JOptionPane.PLAIN_MESSAGE);			
 		}
 	}	
 }
