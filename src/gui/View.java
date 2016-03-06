@@ -7,8 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-
-//import javax.swing.Icon;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -26,8 +25,8 @@ import core.StateObserver;
 public class View implements StateObserver {
 	
 	private JButton[][] button = new JButton[Board.BOARD_SIZE][Board.BOARD_SIZE];
-	private ImageIcon whiteIcon = new ImageIcon(this.getClass().getResource("white.png"));
-	private ImageIcon blackIcon = new ImageIcon(this.getClass().getResource("black.png"));
+	private Icon whiteIcon = new ImageIcon(this.getClass().getResource("white.png"));
+	private Icon blackIcon = new ImageIcon(this.getClass().getResource("black.png"));
 	private JFrame frame;
 	
 	public View() {

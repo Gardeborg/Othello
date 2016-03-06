@@ -15,12 +15,7 @@ class Disk{
 		this.color = color;		
 	}
 	
-	public void setPos(int i, int j) {
-		this.position.x = i;
-		this.position.y = j;
-	}
-	
-	public void setColor(OthelloColor color)  {
+	protected void setColor(OthelloColor color)  {
 		this.color = color;		
 	}
 	
@@ -32,30 +27,31 @@ class Disk{
 		neighbours = n;
 	}
 	
+
+	protected Disk[] getNeighbours() {
+		return neighbours;
+	}
+	
 	/*
 	 * @return the neighbour with coordinates i,j, null if not found
 	 */
 	private Disk getNeighbour(int i, int j) {
 		for(Disk neighbour : neighbours) {
 			if(neighbour != null && 
-			   neighbour.position.x == i && 
-			   neighbour.position.y == j) {
+			   neighbour.position.i == i && 
+			   neighbour.position.j == j) {
 				return neighbour;
 			}
 		}
 		return null;
 	}
 	
-	public Disk getNeighbour(int i) {
-		return neighbours[i];
-	}
-	
-	public static boolean oppositeColor(Disk d1, Disk d2) {
+	protected static boolean oppositeColor(Disk d1, Disk d2) {
 		if(d1.color == d2.color)
 			return false;
 		else 
 			return true;
-	}	
+	}
 	
 	/*
 	 * Calculates the position of the location further away from the 
@@ -66,10 +62,10 @@ class Disk{
 	 * @return 	the position
 	 */	
 	protected Disk findNext(Disk startDisk) {
-		int iDiff = this.position.x - startDisk.position.x;
-		int jDiff = this.position.y - startDisk.position.y;
-		int i = this.position.x + (iDiff == 0 ? iDiff : (iDiff/Math.abs(iDiff)));
-		int j = this.position.y + (jDiff == 0 ? jDiff : (jDiff/Math.abs(jDiff)));
+		int iDiff = this.position.i - startDisk.position.i;
+		int jDiff = this.position.j - startDisk.position.j;
+		int i = this.position.i + (iDiff == 0 ? iDiff : (iDiff/Math.abs(iDiff)));
+		int j = this.position.j + (jDiff == 0 ? jDiff : (jDiff/Math.abs(jDiff)));
 		return getNeighbour(i,j);
 	}	
 	
@@ -92,7 +88,4 @@ class Disk{
 		}
 	}
 
-	protected Disk[] getNeighbours() {
-		return neighbours;
-	}
 }

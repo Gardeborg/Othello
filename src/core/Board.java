@@ -1,5 +1,6 @@
 package core;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Board implements Observable {
 	
@@ -9,8 +10,8 @@ public class Board implements Observable {
 	private boolean 					ongoing 			= true;
 	private OthelloScore 				score 				= new OthelloScore();
 	private BoardState	 				state 				= new BoardState();
-	private ArrayList<ScoreObserver> 	scoreObservers 		= new ArrayList<ScoreObserver>();
-	private ArrayList<StateObserver> 	stateObservers 		= new ArrayList<StateObserver>();
+	private List<ScoreObserver> 	scoreObservers 			= new ArrayList<ScoreObserver>();
+	private List<StateObserver> 	stateObservers 			= new ArrayList<StateObserver>();
 	
 	
 	/**
@@ -74,13 +75,13 @@ public class Board implements Observable {
 				
 		Disk diskToPlace = disks[i][j];
 		diskToPlace.setColor(color);
-		ArrayList<Disk> disksToSwap = new ArrayList<Disk>();
+		List<Disk> disksToSwap = new ArrayList<Disk>();
 		
 		//Check in all directions for disks to swap
 		for(Disk neighbour : diskToPlace.getNeighbours()) {
 			if(neighbour == null)
 				continue;
-			ArrayList<Disk> acc = new ArrayList<Disk>();
+			List<Disk> acc = new ArrayList<Disk>();
 			disksToSwap.addAll(getReversibleDisks(diskToPlace,neighbour,acc));
 		}
 		boolean validMove = false;
@@ -100,7 +101,7 @@ public class Board implements Observable {
 		}
 		return validMove;
 	}	
-	
+		
 	private void updateScore() {
 		score.white = 0;
 		score.black = 0;
@@ -119,7 +120,7 @@ public class Board implements Observable {
 	 * Recursively checks one direction and adds disks of opposite color in acc
 	 * @return a list of reversible disks
 	 */
-	public ArrayList<Disk> getReversibleDisks(Disk diskToPlace, Disk diskToCheck, ArrayList<Disk> acc) {
+	private List<Disk> getReversibleDisks(Disk diskToPlace, Disk diskToCheck, List<Disk> acc) {
 		if(diskToCheck == null || diskToCheck.isEmpty()) {
 			acc.clear();
 			return acc;
@@ -135,11 +136,6 @@ public class Board implements Observable {
 	protected OthelloColor getActivePlayer() {
 		return currentPlayer;
 	}
-	
-	//Only needed for test
-	public void setActivePlayer(OthelloColor color) {
-		currentPlayer = color;
-	}
 
 	private OthelloColor getPassivePlayer() {
 		return currentPlayer.getOpposite();  
@@ -151,34 +147,27 @@ public class Board implements Observable {
 	 * @return true if a placement is possible, false otherwise
 	 */
 	private boolean placementPossible(OthelloColor player) {
-		ArrayList<Disk> acc = new ArrayList<Disk>();
 		for(int i = 0; i < BOARD_SIZE; i++) {
 			for(int j = 0; j < BOARD_SIZE; j++) {
-				Disk diskToPlace = disks[i][j];
-				if(diskToPlace.isEmpty()) {
-					//An empty position. 
-					for(int k = 0; k < Disk.nrOfNeighbours; k++) {
-						Disk neighbour = diskToPlace.getNeighbour(k);
-						//We temporarily place a disk and see if at least one disc would turn.  
-						diskToPlace.setColor(player);
-						getReversibleDisks(diskToPlace,neighbour,acc);
-						diskToPlace.setColor(OthelloColor.EMPTY);
-						if(acc.size() != 0)
-							return true;
-					}
-				}
+				if(diskPlacementPossible(player, i, j)) {
+					return true;
+				}				
 			}
 		}
 		return false;
 	}
 	
+	/**
+	 * Checks if a specific placement is possible
+	 * @param  color - Player color
+	 * @param  i,j position
+	 * @return true if a placement is possible, false otherwise
+	 */
 	public boolean diskPlacementPossible(OthelloColor player, int i, int j) {
-		ArrayList<Disk> acc = new ArrayList<Disk>();
+		List<Disk> acc = new ArrayList<Disk>();
 		Disk diskToPlace = disks[i][j];
 		if(diskToPlace.isEmpty()) {
-			//An empty position. 
-			for(int k = 0; k < Disk.nrOfNeighbours; k++) {
-				Disk neighbour = diskToPlace.getNeighbour(k);
+			for(Disk neighbour : diskToPlace.getNeighbours()) {
 				//We temporarily place a disk and see if at least one disc would turn.  
 				diskToPlace.setColor(player);
 				getReversibleDisks(diskToPlace,neighbour,acc);
