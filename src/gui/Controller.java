@@ -12,10 +12,10 @@ public class Controller {
 		this.view = v;
 		this.board = b;
 		
-		for(int i = 0; i < 8; ++i) {
-			for(int j = 0; j < 8; ++j) {
+		for(int i = 0; i < Board.BOARD_SIZE; ++i) {
+			for(int j = 0; j < Board.BOARD_SIZE; ++j) {
 				view.addButtonListener(i, j, new OthelloActionListener(board, i, j));
-			}			
+			}
 		}
 	}
 }

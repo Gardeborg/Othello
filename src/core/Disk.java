@@ -1,10 +1,10 @@
 package core;
-public class Disk{
+class Disk{
 
-	static final int nrOfNeighbours = 8;
-	private Disk[] neighbours = new Disk[nrOfNeighbours];
-	private Position position;
-	private OthelloColor color = OthelloColor.EMPTY;
+	static final int 		nrOfNeighbours 	= 8;
+	private Disk[] 			neighbours 		= new Disk[nrOfNeighbours];
+	private Position 		position;
+	private OthelloColor 	color 			= OthelloColor.EMPTY;
 		
 	Disk(int i, int j) {
 		this.position = new Position(i,j);
@@ -24,17 +24,26 @@ public class Disk{
 		this.color = color;		
 	}
 	
-	public boolean isEmpty() {
+	protected boolean isEmpty() {
 		return color == OthelloColor.EMPTY;
 	}
 	
-	public void setNeighbours(Disk[] n) {
+	protected void setNeighbours(Disk[] n) {
 		neighbours = n;
 	}
 	
-	public void printNeighbours() {
-		for(int i = 0; i < nrOfNeighbours; i++)
-			System.out.print(neighbours[i].color + ", ");
+	/*
+	 * @return the neighbour with coordinates i,j, null if not found
+	 */
+	private Disk getNeighbour(int i, int j) {
+		for(Disk neighbour : neighbours) {
+			if(neighbour != null && 
+			   neighbour.position.x == i && 
+			   neighbour.position.y == j) {
+				return neighbour;
+			}
+		}
+		return null;
 	}
 	
 	public Disk getNeighbour(int i) {
@@ -46,7 +55,7 @@ public class Disk{
 			return false;
 		else 
 			return true;
-	}
+	}	
 	
 	/*
 	 * Calculates the position of the location further away from the 
@@ -56,15 +65,15 @@ public class Disk{
 	 * @param 	the starting disk
 	 * @return 	the position
 	 */	
-	protected Position findNext(Disk startDisk) {
+	protected Disk findNext(Disk startDisk) {
 		int iDiff = this.position.x - startDisk.position.x;
 		int jDiff = this.position.y - startDisk.position.y;
 		int i = this.position.x + (iDiff == 0 ? iDiff : (iDiff/Math.abs(iDiff)));
 		int j = this.position.y + (jDiff == 0 ? jDiff : (jDiff/Math.abs(jDiff)));
-		return new Position(i,j);
-	}
+		return getNeighbour(i,j);
+	}	
 	
-	public OthelloColor color() {
+	protected OthelloColor color() {
 		return color;
 	}
 	
@@ -75,5 +84,15 @@ public class Disk{
 			System.out.print(0);
 		else
 			System.out.print("b");
+	}
+	
+	protected void printNeighbours() {
+		for(Disk neighbour : neighbours) {
+			System.out.print(neighbour.color + ", ");
+		}
+	}
+
+	protected Disk[] getNeighbours() {
+		return neighbours;
 	}
 }

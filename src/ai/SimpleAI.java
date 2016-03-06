@@ -7,12 +7,14 @@ import core.BoardState;
 import core.OthelloColor;
 import core.StateObserver;
 
+/**
+ * A naive ai - tries to place a disk at random location until it is a valid move
+ */
 public class SimpleAI implements StateObserver {
 	
 	private OthelloColor color; 
 	private Board board;
 		
-	//Change board to an interface instead?
 	public SimpleAI(Board board, OthelloColor color) {
 		this.color = color;
 		this.board = board;
@@ -27,17 +29,10 @@ public class SimpleAI implements StateObserver {
 		    Random randomGenerator = new Random();
 		    int i,j;
 		    do {
-		    	i = randomGenerator.nextInt(8);
-		    	j = randomGenerator.nextInt(8); 
-		    } while(!board.putDisk(color, i, j));
+		    	i = randomGenerator.nextInt(Board.BOARD_SIZE);
+		    	j = randomGenerator.nextInt(Board.BOARD_SIZE); 
+		    } while(!board.diskPlacementPossible(color, i, j));
+		    board.putDisk(color, i, j);
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-
 }

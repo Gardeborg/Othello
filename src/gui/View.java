@@ -25,9 +25,9 @@ import core.StateObserver;
 
 public class View implements StateObserver {
 	
-	private JButton[][] button = new JButton[8][8];
-//	private Icon whiteIcon = new ImageIcon("white.gif");
-//	private Icon blackIcon = new ImageIcon("black.gif");
+	private JButton[][] button = new JButton[Board.BOARD_SIZE][Board.BOARD_SIZE];
+	private ImageIcon whiteIcon = new ImageIcon(this.getClass().getResource("white.png"));
+	private ImageIcon blackIcon = new ImageIcon(this.getClass().getResource("black.png"));
 	private JFrame frame;
 	
 	public View() {
@@ -36,11 +36,12 @@ public class View implements StateObserver {
 			
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setPreferredSize(new Dimension(600, 600));
-
+		
 		addComponentsToPane(frame);
 	    createMenuBar(frame);
 	    
 	    frame.pack();
+	    frame.setLocationRelativeTo(null);
 	    //Display the window.
 	    frame.setVisible(true);
 	}
@@ -82,9 +83,9 @@ public class View implements StateObserver {
 	}
 	
 	private void addComponentsToPane(Container contentPane) {
-		contentPane.setLayout(new GridLayout(8,8));
-		for(int i = 0; i < 8; i++) {
-			for(int j = 0; j < 8; j++) {
+		contentPane.setLayout(new GridLayout(Board.BOARD_SIZE,Board.BOARD_SIZE));
+		for(int i = 0; i < Board.BOARD_SIZE; i++) {
+			for(int j = 0; j < Board.BOARD_SIZE; j++) {
 				JButton tempButton = new JButton();
 				button[i][j] = tempButton;
 				contentPane.add(tempButton);
@@ -93,20 +94,17 @@ public class View implements StateObserver {
 	}
 	
 	private void updateGui(BoardState s) {
-		
-	    for(int i = 0; i < 8; i++) {
-			for(int j = 0; j < 8; j++) {
-				if(s.diskList.get(Board.index(i+1,j+1)).color() == OthelloColor.WHITE) {
-					button[i][j].setIcon(new ImageIcon(this.getClass().getResource("white.gif")));
+		for(int i = 0; i < Board.BOARD_SIZE; i++) {
+			for(int j = 0; j < Board.BOARD_SIZE; j++) {
+				if(s.disks[i][j] == OthelloColor.WHITE) {
+					button[i][j].setIcon(whiteIcon);
 				}
-				else if(s.diskList.get(Board.index(i+1,j+1)).color() == OthelloColor.BLACK) {
-					button[i][j].setIcon(new ImageIcon(this.getClass().getResource("black.gif")));
+				else if(s.disks[i][j] == OthelloColor.BLACK) {
+					button[i][j].setIcon(blackIcon);
 				}
-			
-			//TODO is this slower than using two icons to set everywhere?
-			//button[i][j].setIcon(new ImageIcon(this.getClass().getResource("white.gif")));
 			}
 	    }
+		
 	    String player;
 	    if(s.currentPlayer == OthelloColor.WHITE)
 	    	player = "White's turn";
@@ -124,7 +122,7 @@ public class View implements StateObserver {
 	public void updateState(BoardState s) {
 		updateGui(s);
 		if(!s.ongoing) {
-			JOptionPane.showMessageDialog(frame, "Game ended!", 
+			JOptionPane.showMessageDialog(frame, "Game ended!",
 					"Good Job both of you", JOptionPane.PLAIN_MESSAGE);			
 		}
 	}	

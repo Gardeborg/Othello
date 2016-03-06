@@ -3,15 +3,15 @@ import java.awt.event.*;
 
 public class OthelloActionListener implements ActionListener{
 	int i; int j;
-	Board b;
+	Board board;
 	
 	public OthelloActionListener(Board b, int i, int j) {
 		this.i = i;
 		this.j = j;
-		this.b = b;
+		this.board = b;
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		b.putDisk(b.getActivePlayer(), i, j);
+		board.putDisk(board.getActivePlayer(), i, j);
 	}
 }
